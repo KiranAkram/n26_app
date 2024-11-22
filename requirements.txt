@@ -1,0 +1,7 @@
+langchain==0.3.7
+langchain_community==0.3.7
+langchain_core==0.3.19
+langchain_openai==0.2.9
+nest_asyncio==1.6.0
+pandas==2.2.3
+streamlit==1.40.1

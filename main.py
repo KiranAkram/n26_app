@@ -1,5 +1,4 @@
 # importing libraries
-import os
 import pandas as pd
 import streamlit as st
 
@@ -11,8 +10,7 @@ from langchain.prompts import PromptTemplate
 from langchain_openai.chat_models import ChatOpenAI
 from langchain_core.output_parsers import StrOutputParser
 from operator import itemgetter
-from langchain_core.runnables import RunnablePassthrough
-from langchain_community.vectorstores import Chroma
+from langchain_community.vectorstores import DocArrayInMemorySearch
 from langchain.retrievers import BM25Retriever, EnsembleRetriever
 
 from functools import reduce
@@ -21,7 +19,6 @@ import logging
 
 from config import template, logo_path, f_path, model
 
-# import config
 # Set the logging level for httpx to WARNING to suppress INFO logs
 logging.getLogger("httpx").setLevel(logging.WARNING)
 
@@ -77,7 +74,9 @@ def combine_excel_sheets(file_path):
 def hybrid_retriever(chunks):
     # embeddings, creating vector store
     embeddings = OpenAIEmbeddings()
-    vectorstore = Chroma.from_documents(documents=chunks, embedding=embeddings)
+    vectorstore = DocArrayInMemorySearch.from_documents(
+        documents=chunks, embedding=embeddings
+    )
     # add no of retrived docs for context based on similarity search
     vec_retriever = vectorstore.as_retriever(search_kwargs={"k": 3})
 
